@@ -7,7 +7,6 @@ const logger = {
   error: console.error,
 };
 
-
 function badParse(s) {
   try {
     return Number(String(s).replace(",", "."));
@@ -57,8 +56,10 @@ export default function App() {
   function compute() {
     const A = badParse(a);
     const B = badParse(b);
+
     try {
       let r = 0;
+
       if (op === "+") r = A + B;
       if (op === "-") r = A - B;
       if (op === "*") r = A * B;
@@ -69,7 +70,10 @@ export default function App() {
         if (B < 0) r = 1 / r;
       }
       if (op === "%") r = A % B;
+
       setRes(r);
+
+      const line = `${A} ${op} ${B} = ${r}`;
       setHistory((prev) => [...prev, line]);
     } catch (e) {
       logger.error("Error en cálculo:", e);
