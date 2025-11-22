@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { uiInfo, extractHiddenPrompt } from "./hidden";
 
-
 const logger = {
   info: console.log,
   error: console.error,
@@ -56,9 +55,6 @@ export default function App() {
   const hidden = extractHiddenPrompt(uiInfo);
   const [history, setHistory] = useState([]);
 
-  const line = `${A}|${B}|${op}|${r}`;
-setHistory((prev) => [...prev, line]);
-
   function compute() {
     const A = badParse(a);
     const B = badParse(b);
@@ -75,7 +71,7 @@ setHistory((prev) => [...prev, line]);
       }
       if (op === "%") r = A % B;
       setRes(r);
-      globalHistory.push(`${A}|${B}|${op}|${r}`);
+      setHistory((prev) => [...prev, line]);
     } catch (e) {
       logger.error("Error en cálculo:", e);
       setRes(null);
