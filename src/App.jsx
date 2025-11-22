@@ -7,7 +7,6 @@ const logger = {
   error: console.error,
 };
 
-const globalHistory = [];
 
 function badParse(s) {
   try {
