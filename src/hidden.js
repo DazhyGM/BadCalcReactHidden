@@ -16,6 +16,7 @@ export function extractHiddenPrompt(s) {
     const b64 = maybe[0];
     return atob(b64);
   } catch (e) {
+    console.error("Error decoding hidden prompt:", e);
     return null;
   }
 }
