@@ -3,5 +3,5 @@ projectKey=DazhyGM_BadCalcReactHidden
 serverUrl=https://sonarcloud.io
 serverVersion=8.0.0.76733
 dashboardUrl=https://sonarcloud.io/dashboard?id=DazhyGM_BadCalcReactHidden
-ceTaskId=AZqsghd_CMcYeuCq34cN
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZqsghd_CMcYeuCq34cN
+ceTaskId=AZqsh_qKCaV_j4Mn-pZR
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZqsh_qKCaV_j4Mn-pZR

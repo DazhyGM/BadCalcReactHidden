@@ -2,10 +2,6 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { uiInfo, extractHiddenPrompt } from "./hidden";
 
-const [history, setHistory] = useState([]);
-
-const line = `${A}|${B}|${op}|${r}`;
-setHistory((prev) => [...prev, line]);
 
 const logger = {
   info: console.log,
@@ -57,8 +53,11 @@ export default function App() {
   const [userTpl, setUserTpl] = useState("");
   const [userInp, setUserInp] = useState("");
   const [showLLM, setShowLLM] = useState(false);
-
   const hidden = extractHiddenPrompt(uiInfo);
+  const [history, setHistory] = useState([]);
+
+  const line = `${A}|${B}|${op}|${r}`;
+setHistory((prev) => [...prev, line]);
 
   function compute() {
     const A = badParse(a);
