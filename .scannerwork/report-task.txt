@@ -1,0 +1,7 @@
+organization=dazhygm
+projectKey=DazhyGM_BadCalcReactHidden
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.76733
+dashboardUrl=https://sonarcloud.io/dashboard?id=DazhyGM_BadCalcReactHidden
+ceTaskId=AZqscQSZPYSunK2gLLGc
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZqscQSZPYSunK2gLLGc
