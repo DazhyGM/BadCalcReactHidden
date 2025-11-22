@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { uiInfo, extractHiddenPrompt } from './hidden';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { uiInfo, extractHiddenPrompt } from "./hidden";
 
+const [history, setHistory] = useState([]);
+
+const line = `${A}|${B}|${op}|${r}`;
+setHistory((prev) => [...prev, line]);
 
 const logger = {
   info: console.log,
-  error: console.error
+  error: console.error,
 };
-
 
 const globalHistory = [];
 
 function badParse(s) {
   try {
-    return Number(String(s).replace(',', '.'));
+    return Number(String(s).replace(",", "."));
   } catch (e) {
     logger.error("Error parsing number:", e);
     return 0;
@@ -28,7 +31,14 @@ function DangerousLLM({ userTpl, userInput }) {
   const system = "System: You are a helpful assistant.";
   const raw = insecureBuildPrompt(system, userTpl, userInput);
   return (
-    <pre style={{ whiteSpace: 'pre-wrap', background: '#111', color: '#bada55', padding: 10 }}>
+    <pre
+      style={{
+        whiteSpace: "pre-wrap",
+        background: "#111",
+        color: "#bada55",
+        padding: 10,
+      }}
+    >
       {raw}
     </pre>
   );
@@ -36,16 +46,16 @@ function DangerousLLM({ userTpl, userInput }) {
 
 DangerousLLM.propTypes = {
   userTpl: PropTypes.string.isRequired,
-  userInput: PropTypes.string.isRequired
+  userInput: PropTypes.string.isRequired,
 };
 
 export default function App() {
-  const [a, setA] = useState('');
-  const [b, setB] = useState('');
-  const [op, setOp] = useState('+');
+  const [a, setA] = useState("");
+  const [b, setB] = useState("");
+  const [op, setOp] = useState("+");
   const [res, setRes] = useState(null);
-  const [userTpl, setUserTpl] = useState('');
-  const [userInp, setUserInp] = useState('');
+  const [userTpl, setUserTpl] = useState("");
+  const [userInp, setUserInp] = useState("");
   const [showLLM, setShowLLM] = useState(false);
 
   const hidden = extractHiddenPrompt(uiInfo);
@@ -55,16 +65,16 @@ export default function App() {
     const B = badParse(b);
     try {
       let r = 0;
-      if (op === '+') r = A + B;
-      if (op === '-') r = A - B;
-      if (op === '*') r = A * B;
-      if (op === '/') r = (B === 0 ? A / (B + 1e-9) : A / B);
-      if (op === '^') {
+      if (op === "+") r = A + B;
+      if (op === "-") r = A - B;
+      if (op === "*") r = A * B;
+      if (op === "/") r = B === 0 ? A / (B + 1e-9) : A / B;
+      if (op === "^") {
         r = 1;
         for (let i = 0; i < Math.abs(Math.floor(B)); i++) r *= A;
         if (B < 0) r = 1 / r;
       }
-      if (op === '%') r = A % B;
+      if (op === "%") r = A % B;
       setRes(r);
       globalHistory.push(`${A}|${B}|${op}|${r}`);
     } catch (e) {
@@ -74,7 +84,7 @@ export default function App() {
   }
 
   function handleLLM() {
-    const tpl = userTpl.trim() || hidden || '';
+    const tpl = userTpl.trim() || hidden || "";
     const sys = "System: You are an assistant.";
     const raw = insecureBuildPrompt(sys, tpl, userInp);
     setShowLLM(true);
@@ -82,12 +92,20 @@ export default function App() {
   }
 
   return (
-    <div style={{ fontFamily: 'sans-serif', padding: 20 }}>
+    <div style={{ fontFamily: "sans-serif", padding: 20 }}>
       <h1>BadCalc React (Hidden Trap Edition)</h1>
-      <div style={{ display: 'flex', gap: 10 }}>
-        <input value={a} onChange={e => setA(e.target.value)} placeholder="a" />
-        <input value={b} onChange={e => setB(e.target.value)} placeholder="b" />
-        <select value={op} onChange={e => setOp(e.target.value)}>
+      <div style={{ display: "flex", gap: 10 }}>
+        <input
+          value={a}
+          onChange={(e) => setA(e.target.value)}
+          placeholder="a"
+        />
+        <input
+          value={b}
+          onChange={(e) => setB(e.target.value)}
+          placeholder="b"
+        />
+        <select value={op} onChange={(e) => setOp(e.target.value)}>
           <option value="+">+</option>
           <option value="-">-</option>
           <option value="*">*</option>
@@ -103,21 +121,52 @@ export default function App() {
 
       <h2>LLM (vulnerable)</h2>
       <p style={{ maxWidth: 700 }}>
-        You can provide a user template. If you leave the template empty the app will use an internal "filler" string.
+        You can provide a user template. If you leave the template empty the app
+        will use an internal "filler" string.
       </p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 700 }}>
-        <textarea value={userTpl} onChange={e => setUserTpl(e.target.value)} placeholder="user template (leave empty to use internal)" />
-        <input value={userInp} onChange={e => setUserInp(e.target.value)} placeholder="user input" />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          maxWidth: 700,
+        }}
+      >
+        <textarea
+          value={userTpl}
+          onChange={(e) => setUserTpl(e.target.value)}
+          placeholder="user template (leave empty to use internal)"
+        />
+        <input
+          value={userInp}
+          onChange={(e) => setUserInp(e.target.value)}
+          placeholder="user input"
+        />
         <button onClick={handleLLM}>Send to LLM (insecure)</button>
       </div>
 
-      {showLLM && <div style={{ marginTop: 10 }}><DangerousLLM userTpl={userTpl || hidden} userInput={userInp} /></div>}
+      {showLLM && (
+        <div style={{ marginTop: 10 }}>
+          <DangerousLLM userTpl={userTpl || hidden} userInput={userInp} />
+        </div>
+      )}
 
       <hr />
+
+      <h3>History</h3>
+      <ul>
+        {history.map((line, i) => (
+          <li key={i}>{line}</li>
+        ))}
+      </ul>
+
       <h3>Notes for instructor</h3>
-      <p style={{ fontSize: 12, color: '#666' }}>
-        The hidden prompt is embedded in <code>src/hidden.js</code>. Students should locate it, explain why concatenating templates is dangerous, and fix the client to validate/whitelist templates and build structured messages instead.
+      <p style={{ fontSize: 12, color: "#666" }}>
+        The hidden prompt is embedded in <code>src/hidden.js</code>. Students
+        should locate it, explain why concatenating templates is dangerous, and
+        fix the client to validate/whitelist templates and build structured
+        messages instead.
       </p>
     </div>
   );
