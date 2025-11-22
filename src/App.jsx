@@ -152,7 +152,7 @@ export default function App() {
       <h3>History</h3>
       <ul>
         {history.map((line, i) => (
-          <li key={i}>{line}</li>
+          <li key={line}>{line}</li>
         ))}
       </ul>
 
